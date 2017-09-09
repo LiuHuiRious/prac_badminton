@@ -5,9 +5,14 @@ describe('just a test', function () {
         expect(result).toEqual(showName(data))
     })
 })
-describe('booking:if the input string not has the right length', function () {
-    it("test the input string's length" , function () {
+describe('Badminton', function () {
+    it("when given wrong string should throw Exception" , function () {
         var data = 'asd asdasdasd';
+        var result = 'Error: the booking is invalid';
+        expect(result).toEqual(createOder(data))
+    })
+    it('when given not whole hour should throw Exception', function () {
+        var data = 'U234 2016-06-02 09:20~10:01 A';
         var result = 'Error: the booking is invalid';
         expect(result).toEqual(createOder(data))
     })

@@ -23,8 +23,12 @@ function createOder(order) {
     var data = order.split(' ');
     try {
         if(data.length === 4|| data.length === 5){
-            addOrderToList(data);
-            console.log(orderList)
+            if(checkIsWholeHour(data[2])){
+                addOrderToList(data);
+            }
+            else {
+                throw new CommonException();
+            }
         }
         else {
             throw new CommonException();
@@ -42,4 +46,15 @@ function CommonException()
 }
 function addOrderToList(order){
     orderList.push({date:order[1],time:order[2],place:order[3]});
+}
+function checkIsWholeHour(time){
+    var timeArr = time.split('~');
+    var isWholeHour;
+    for(var i=0; i<timeArr.length; i++){
+        var splitTimeArr = timeArr[i].split(':');
+        if(splitTimeArr[1] != '00'){
+            isWholeHour = false;
+        }
+    }
+    return  isWholeHour;
 }

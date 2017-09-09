@@ -23,7 +23,7 @@ function createOder(order) {
     var data = order.split(' ');
     try {
         if(data.length === 4|| data.length === 5){
-            if(checkIsWholeHour(data[2])){
+            if(checkIsWholeHour(data[2]) && !checkOrderHasTheSame(data)){
                 addOrderToList(data);
                 return 'Success: the booking is accepted';
             }
@@ -60,4 +60,13 @@ function checkIsWholeHour(time){
         }
     }
     return  isWholeHour;
+}
+function checkOrderHasTheSame(newOrder){
+    var hasTheSame = false;
+    orderList.map(function (oItem, oIndex, oInput) {
+        if(oItem.date == newOrder[1] && oItem.time == newOrder[2] && oItem.place == newOrder[3]){
+            hasTheSame = true;
+        }
+    });
+    return hasTheSame;
 }

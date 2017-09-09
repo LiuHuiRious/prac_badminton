@@ -31,14 +31,14 @@ function createOder(order) {
             }
             else {
                 addOrderToList(data);
-                return 'Success: the booking is accepted';
+                throw new CommonException('Success: the booking is accepted');
             }
         }
         else if (data.length === 5){
             if(data[4] == 'C'){
                 if(checkIsWholeHour(data[2]) && checkOrderHasTheSame(data)){
-                    addOrderToList(data);
-                    return 'Success: the booking is accepted';
+                    cancelOrder(data);
+                    throw new CommonException('Success: the booking is accepted');
                 }
                 else {
                     throw new CommonException();
@@ -90,4 +90,11 @@ function checkOrderHasTheSame(newOrder){
         }
     });
     return hasTheSame;
+}
+function cancelOrder(order){
+    orderList.map(function (oItem, oIndex, oInput) {
+        if(oItem.date == order[1] && oItem.time == order[2] && oItem.place == order[3]){
+            orderList.splice(oIndex,1);
+        }
+    });
 }

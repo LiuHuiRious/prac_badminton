@@ -22,15 +22,31 @@ function showName(name){
 function createOder(order) {
     var data = order.split(' ');
     try {
-        if(data.length === 4|| data.length === 5){
-            if(checkIsWholeHour(data[2]) && !checkOrderHasTheSame(data)){
+        if(data.length === 4){
+            if(!checkIsWholeHour(data[2])){
+                throw new CommonException();
+            }
+            else if(checkOrderHasTheSame(data)){
+                throw new CommonException('Error: the booking conflicts with existing bookings');
+            }
+            else {
                 addOrderToList(data);
                 return 'Success: the booking is accepted';
             }
-            else {
-                throw new CommonException();
+        }
+        else if (data.length === 5){
+            if(data[4] == 'C'){
+                if(checkIsWholeHour(data[2]) && checkOrderHasTheSame(data)){
+                    addOrderToList(data);
+                    return 'Success: the booking is accepted';
+                }
+                else {
+                    throw new CommonException();
+                }
             }
-
+            else {
+                throw new CommonException('Error: the cancel order was not right');
+            }
         }
         else {
             throw new CommonException();
@@ -43,9 +59,14 @@ function createOder(order) {
     }
 }
 
-function CommonException()
+function CommonException(message)
 {
-    this.message = 'Error: the booking is invalid';
+    if(message){
+        this.message = message;
+    }
+    else {
+        this.message = 'Error: the booking is invalid';
+    }
 }
 function addOrderToList(order){
     orderList.push({date:order[1],time:order[2],place:order[3]});

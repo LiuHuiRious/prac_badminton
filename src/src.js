@@ -25,14 +25,17 @@ function createOder(order) {
         if(data.length === 4|| data.length === 5){
             if(checkIsWholeHour(data[2])){
                 addOrderToList(data);
+                return 'Success: the booking is accepted';
             }
             else {
                 throw new CommonException();
             }
+
         }
         else {
             throw new CommonException();
         }
+
     }
     catch (e){
         console.log(e.message);
@@ -49,7 +52,7 @@ function addOrderToList(order){
 }
 function checkIsWholeHour(time){
     var timeArr = time.split('~');
-    var isWholeHour;
+    var isWholeHour = true;
     for(var i=0; i<timeArr.length; i++){
         var splitTimeArr = timeArr[i].split(':');
         if(splitTimeArr[1] != '00'){

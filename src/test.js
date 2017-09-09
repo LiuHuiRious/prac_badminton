@@ -16,4 +16,10 @@ describe('Badminton', function () {
         var result = 'Error: the booking is invalid';
         expect(result).toEqual(createOder(data))
     })
+    it('when given the whole hour should return ', function () {
+        var data = 'U234 2016-06-02 09:00~10:00 A';
+        var result = 'Success: the booking is accepted';
+        expect(result).toEqual(createOder(data))
+    })
+
 })

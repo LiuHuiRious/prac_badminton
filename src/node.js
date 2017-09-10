@@ -1,3 +1,12 @@
+const readLine = require('readline');
+
+var r1 =readLine.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
+r1.on('line', line => {
+    createOder(line);
+})
 var feeStandard = {
     normal:
     {
@@ -20,20 +29,17 @@ var feeStandard = {
     }
 };
 
-var orderList = [{date:'2016-06-02',time:'20:00~22:00',place:'A',status:'ok'}];
+var orderList = [];
+var allPlace = ['A','B','C','D'];
 
-function showName(name){
-    return 'name:' + name;
-}
 function createOder(order) {
     var data = order.split(' ');
-    if(order == '\n'){
+    if(order == ''){
         var outPutString = outPutOrder();
-        console.log(orderList)
-        return outPutString;
+        console.log(outPutString);
     }
     try {
-        if(data.length === 4){
+        if(data.length === 4 && allPlace.indexOf(data[3] !=-1)){
             if(!checkIsWholeHour(data[2])){
                 throw new CommonException();
             }
@@ -59,6 +65,9 @@ function createOder(order) {
                 throw new CommonException('Error: the cancel order was not right');
             }
         }
+        if (data && data[0] === ''){
+
+        }
         else {
             throw new CommonException();
         }
@@ -66,7 +75,6 @@ function createOder(order) {
     }
     catch (e){
         console.log(e.message);
-        return(e.message);
     }
 }
 
@@ -117,7 +125,7 @@ function splitTime(time){
 function checkOrderHasTheSame(newOrder){
     var hasTheSame = false;
     orderList.map(function (oItem, oIndex, oInput) {
-        if(oItem.status == 'ok' && oItem.date == newOrder[1] && oItem.time == newOrder[2] && oItem.place == newOrder[3]){
+        if(oItem.date == newOrder[1] && oItem.time == newOrder[2] && oItem.place == newOrder[3] && oItem.status == 'ok'){
             hasTheSame = true;
         }
     });
@@ -125,8 +133,8 @@ function checkOrderHasTheSame(newOrder){
 }
 function cancelOrder(order){
     orderList.map(function (oItem, oIndex, oInput) {
-        if(oItem.status=='ok' && oItem.date == order[1] && oItem.time == order[2] && oItem.place == order[3]){
-            oItem.status = 'cancel';
+        if(oItem.status == 'ok' && oItem.date == order[1] && oItem.time == order[2] && oItem.place == order[3]){
+            oInput[oIndex].status = 'cancel';
         }
     });
 }
@@ -138,7 +146,7 @@ function outPutOrder(){
     orderList.map(function (oItem, oIndex, oInput) {
         outputOrder.push(oItem);
     });
-    outputString += '收入汇总：\n---\n'
+    outputString += '收入汇总：\n---\n';
     outputOrder.sort(compareBy('time')).sort(compareBy('date')).sort(compareBy('place'));
     allPlace.map(function (item, index, input) {
         outputString += '场地：' + item + '\n';

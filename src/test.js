@@ -36,11 +36,6 @@ describe('Badminton', function () {
         var result = 'Success: the booking is accepted';
         expect(result).toEqual(createOder(data));
     });
-    it('when given a empty line should output all the bookings', function () {
-        var data = '\n';
-        var result = '2016-06-02 20:00~22:00 120元\n2016-06-02 20:00~22:00 违约金 60元\n2016-06-02 09:00~10:00 30元\n';
-        expect(result).toEqual(createOder(data));
-    });
     it('when given a time conflict order should return Error: the booking conflicts with existing bookings', function () {
         var data = 'U235 2016-06-02 18:00~22:00 A';
         var result = 'Error: the booking conflicts with existing bookings';

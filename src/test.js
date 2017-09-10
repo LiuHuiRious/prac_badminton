@@ -38,7 +38,7 @@ describe('Badminton', function () {
     });
     it('when given a empty line should output all the bookings', function () {
         var data = '\n';
-        var result = '2016-06-02 20:00~22:00\n2016-06-02 20:00~22:00\n2016-06-02 09:00~10:00\n';
+        var result = '2016-06-02 20:00~22:00 120元\n2016-06-02 20:00~22:00 违约金 60元\n2016-06-02 09:00~10:00 30元\n';
         expect(result).toEqual(createOder(data));
     });
     it('when given a time conflict order should return Error: the booking conflicts with existing bookings', function () {

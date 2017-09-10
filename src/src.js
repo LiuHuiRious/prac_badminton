@@ -1,17 +1,23 @@
 var feeStandard = {
     normal:
-        [
+    {
+        time:[
             {begin:9,end:12,price:30},
             {begin:12,end:18,price:50},
             {begin:18,end:20,price:80},
             {begin:20,end:22,price:60}
         ],
+        fee:0.5
+    },
     weekend:
-        [
+    {
+        time:[
             {begin:9,end:12,price:40},
             {begin:12,end:18,price:50},
             {begin:18,end:22,price:60}
-    ]
+        ],
+        fee:0.3
+    }
 };
 
 var orderList = [{date:'2016-06-02',time:'20:00~22:00',place:'A',status:'ok'}];
@@ -23,6 +29,7 @@ function createOder(order) {
     var data = order.split(' ');
     if(order == '\n'){
         var outPutString = outPutOrder();
+        console.log(orderList)
         return outPutString;
     }
     try {
@@ -132,7 +139,34 @@ function outPutOrder(){
     outputOrder.sort(function (a, b) {
         return a.place.charCodeAt(0)- b.place.charCodeAt(0);
     }).map(function (oItem, oIndex, oInput) {
-        outputString += oItem.date + ' ' + oItem.time + '\n';
+        outputString += oItem.date + ' ' + oItem.time + calculatePrice(oItem) + '元\n';
     });
     return outputString
+}
+function calculatePrice(order){
+    var price,ifCanceld = false,feeType;
+    var day = new Date(order.date).getDay();
+    if(day>=1&&day<=5){
+        feeType = 'normal'
+    }
+    else if (day == 0||day == 6){
+        feeType = 'weekend';
+    }
+    return price = calculateRealPrice(order,feeType);
+}
+function calculateRealPrice(order,feeType){
+    var time = splitTime(order.time);
+    var price = 0,curTime = time.begin;
+    feeStandard[feeType].time.map(function (item, index, input) {
+        if(time.begin>=item.begin && time.begin<item.end){
+            if(time.end<=item.end){
+                price += item.price * (time.end - curTime);
+            }
+            else {
+                price += item.price * (item.end - curTime);
+                curTime = item.end;
+            }
+        }
+    })
+    return order.status == 'cancel' ? ' 违约金 '+price*feeStandard[feeType].fee : ' ' + price;
 }

@@ -133,18 +133,35 @@ function cancelOrder(order){
 function outPutOrder(){
     var outputString = '';
     var outputOrder = [];
+    var subTotal = 0;
+    var total = 0;
     orderList.map(function (oItem, oIndex, oInput) {
         outputOrder.push(oItem);
     });
-    outputOrder.sort(function (a, b) {
-        return a.place.charCodeAt(0)- b.place.charCodeAt(0);
-    }).map(function (oItem, oIndex, oInput) {
-        outputString += oItem.date + ' ' + oItem.time + calculatePrice(oItem) + '元\n';
+    outputString += '收入汇总：\n---\n'
+    outputOrder.sort(compareBy('time')).sort(compareBy('date')).sort(compareBy('place'))
+        .map(function (oItem, oIndex, oInput) {
+        if (oIndex == 0){
+            outputString += '场地：' + oItem.place +'\n';
+        }
+        else {
+            if(oItem.place != oInput[oIndex-1].place){
+                outputString += '小计：' + subTotal + '元\n';
+                outputString += '场地：' + oItem.place +'\n';
+                subTotal = 0;
+            }
+        }
+        oItem.price = calculatePrice(oItem);
+        subTotal += oItem.price;
+        total += oItem.price;
+        outputString += oItem.date + ' ' + oItem.time +  (oItem.status == 'cancel'?' 违约金 ' + oItem.price: ' ' + oItem.price) + '元\n';
     });
+    outputString += '小计：' + subTotal + '元\n';
+    outputString += '---\n总计：' + total + '元\n';
     return outputString
 }
 function calculatePrice(order){
-    var price,ifCanceld = false,feeType;
+    var price,feeType;
     var day = new Date(order.date).getDay();
     if(day>=1&&day<=5){
         feeType = 'normal'
@@ -167,6 +184,13 @@ function calculateRealPrice(order,feeType){
                 curTime = item.end;
             }
         }
-    })
-    return order.status == 'cancel' ? ' 违约金 '+price*feeStandard[feeType].fee : ' ' + price;
+    });
+    return order.status == 'cancel' ? price*feeStandard[feeType].fee : price;
+}
+function compareBy(property) {
+    return function (a,b){
+        var value1 = a[property];
+        var value2 = b[property];
+        return value1.localeCompare(value2);
+    }
 }

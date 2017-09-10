@@ -17,7 +17,7 @@ describe('Badminton', function () {
         expect(result).toEqual(createOder(data))
     });
     it('when given the whole hour should return Success: the booking is accepted', function () {
-        var data = 'U234 2016-06-02 09:00~10:00 A';
+        var data = 'U234 2016-06-02 09:00~10:00 B';
         var result = 'Success: the booking is accepted';
         expect(result).toEqual(createOder(data))
     });
@@ -34,6 +34,11 @@ describe('Badminton', function () {
     it('when given the right cancel char should cancel this order', function () {
         var data = 'U234 2016-06-02 20:00~22:00 A C';
         var result = 'Success: the booking is accepted';
+        expect(result).toEqual(createOder(data));
+    });
+    it('when given a empty line should output all the bookings', function () {
+        var data = '\n';
+        var result = '2016-06-02 20:00~22:00\n2016-06-02 20:00~22:00\n2016-06-02 09:00~10:00\n';
         expect(result).toEqual(createOder(data));
     });
 

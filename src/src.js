@@ -14,13 +14,17 @@ var feeStandard = {
     ]
 };
 
-var orderList = [{date:'2016-06-02',time:'20:00~22:00',place:'A'}];
+var orderList = [{date:'2016-06-02',time:'20:00~22:00',place:'A',status:'ok'}];
 
 function showName(name){
     return 'name:' + name;
 }
 function createOder(order) {
     var data = order.split(' ');
+    if(order == '\n'){
+        var outPutString = outPutOrder();
+        return outPutString;
+    }
     try {
         if(data.length === 4){
             if(!checkIsWholeHour(data[2])){
@@ -69,7 +73,7 @@ function CommonException(message)
     }
 }
 function addOrderToList(order){
-    orderList.push({date:order[1],time:order[2],place:order[3]});
+    orderList.push({date:order[1],time:order[2],place:order[3],status:'ok'});
 }
 function checkIsWholeHour(time){
     var timeArr = time.split('~');
@@ -94,7 +98,20 @@ function checkOrderHasTheSame(newOrder){
 function cancelOrder(order){
     orderList.map(function (oItem, oIndex, oInput) {
         if(oItem.date == order[1] && oItem.time == order[2] && oItem.place == order[3]){
-            orderList.splice(oIndex,1);
+            orderList.push({date:order[1],time:order[2],place:order[3],status:'cancel'});
         }
     });
+}
+function outPutOrder(){
+    var outputString = '';
+    var outputOrder = [];
+    orderList.map(function (oItem, oIndex, oInput) {
+        outputOrder.push(oItem);
+    });
+    outputOrder.sort(function (a, b) {
+        return a.place.charCodeAt(0)- b.place.charCodeAt(0);
+    }).map(function (oItem, oIndex, oInput) {
+        outputString += oItem.date + ' ' + oItem.time + '\n';
+    });
+    return outputString
 }

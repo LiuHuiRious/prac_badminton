@@ -30,7 +30,7 @@ function createOder(order) {
             if(!checkIsWholeHour(data[2])){
                 throw new CommonException();
             }
-            else if(checkOrderHasTheSame(data)){
+            else if(checkIfOrderConflict(data)){
                 throw new CommonException('Error: the booking conflicts with existing bookings');
             }
             else {
@@ -85,6 +85,27 @@ function checkIsWholeHour(time){
         }
     }
     return  isWholeHour;
+}
+function checkIfOrderConflict(newOrder){
+    var orderConflict = false;
+    var timeConflict = false;
+    var time = splitTime(newOrder[2]);
+    orderList.map(function (oItem, oIndex, oInput) {
+        var orderTime = splitTime(oItem.time);
+        if((time.begin>=orderTime.begin && time.begin<orderTime.end)||(time.end>orderTime.begin && time.end<=orderTime.end)){
+            timeConflict = true;
+        }
+        if(oItem.date == newOrder[1] && timeConflict && oItem.place == newOrder[3]){
+            orderConflict = true;
+        }
+    });
+    return orderConflict;
+}
+function splitTime(time){
+    var timeArr = time.split('~');
+    var beginHour = parseInt(timeArr[0]);
+    var endOur = parseInt(timeArr[1]);
+    return {begin:beginHour,end:endOur};
 }
 function checkOrderHasTheSame(newOrder){
     var hasTheSame = false;

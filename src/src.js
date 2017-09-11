@@ -129,7 +129,7 @@ function checkOrderHasTheSame(newOrder){
 }
 function cancelOrder(order){
     orderList.map(function (oItem, oIndex, oInput) {
-        if(oItem.status=='ok' && oItem.date == order[1] && oItem.time == order[2] && oItem.place == order[3]){
+        if(oItem.status=='ok' && oItem.date == order[1]&& oItem.date == order[1] && oItem.time == order[2] && oItem.place == order[3]){
             oItem.status = 'cancel';
         }
     });

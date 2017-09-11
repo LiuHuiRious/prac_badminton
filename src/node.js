@@ -34,10 +34,6 @@ var allPlace = ['A','B','C','D'];
 
 function createOder(order) {
     var data = order.split(' ');
-    if(order == ''){
-        var outPutString = outPutOrder();
-        console.log(outPutString);
-    }
     try {
         if(data.length === 4 && allPlace.indexOf(data[3] !=-1)){
             if(!checkIsWholeHour(data[2])){
@@ -53,21 +49,22 @@ function createOder(order) {
         }
         else if (data.length === 5){
             if(data[4] == 'C'){
-                if(checkIsWholeHour(data[2]) && checkOrderHasTheSame(data)){
-                    cancelOrder(data);
-                    throw new CommonException('Success: the booking is accepted');
+                if(!checkIsWholeHour(data[2])){
+                    throw new CommonException();
+                }
+                else if(!checkOrderHasTheSame(data)){
+                    throw new CommonException('Error：the booking being cancelled does not exist!');
                 }
                 else {
-                    throw new CommonException();
+                    cancelOrder(data);
+                    throw new CommonException('Success: the booking is accepted');
                 }
             }
             else {
                 throw new CommonException('Error: the cancel order was not right');
             }
         }
-        if (data && data[0] === ''){
-
-        }
+        if (data && data[0] === ''){}//防止node弹出异常错误！
         else {
             throw new CommonException();
         }

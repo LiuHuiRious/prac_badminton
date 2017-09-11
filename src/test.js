@@ -37,7 +37,7 @@ describe('Badminton', function () {
         expect(result).toEqual(createOder(data));
     });
     it('when given a time conflict order should return Error: the booking conflicts with existing bookings', function () {
-        var data = 'U235 2016-06-02 18:00~22:00 A';
+        var data = 'U235 2016-06-02 09:00~12:00 B';
         var result = 'Error: the booking conflicts with existing bookings';
         expect(result).toEqual(createOder(data));
     });

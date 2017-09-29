@@ -27,7 +27,7 @@ function showName(name){
 }
 function createOder(order) {
     var data = order.split(' ');
-    if(order == '\n'){
+    if(order == ''){
         var outPutString = outPutOrder();
         console.log(orderList)
         return outPutString;

@@ -34,6 +34,10 @@ var allPlace = ['A','B','C','D'];
 
 function createOder(order) {
     var data = order.split(' ');
+    if(order == ''){
+        var outPutString = outPutOrder();
+        console.log(outPutString)
+    }
     try {
         if(data.length === 4 && allPlace.indexOf(data[3] !=-1)){
             if(!checkIsWholeHour(data[2])){
